@@ -1,16 +1,14 @@
-// 0.0.1
+// 0.0.2
 
 // ---- ИМПОРТ ---- //
 const express = require('express');
-const videoRoutes = require('./routes/videoRoutes')
+const videoRoutes = require('./src/routes/videoRoutes')
 
 const app = express();
 
 
-
 // ---- МАРШРУТЫ ---- //
-// VIDEO //
-app.use('/video', videoRoutes); // ТЕСТ
+app.use('/video', videoRoutes); // Видосики
 
 
 
