@@ -1,9 +1,13 @@
 // ---- НАСТРОЙКИ ---- //
+const express = require('express');
+const app = express();
+
+const multer  = require("multer");
 const fs = require('fs');
 const path = require('path');
 const db = require('../db');
 
-
+const Video = require('../models/videoModel');
 
 // ---- МЕТОДЫ ---- //
 
@@ -54,6 +58,44 @@ exports.startStream = (req, res) => {
     console.log('VIDEO EXPORT ROUTE');
 }
 
+const upload = multer({ dest: "../videos" });
+exports.importVideo = async (req, res, next) => {
+    try {
+        upload.single("filedata")(req, res, err => {
+            if (err instanceof multer.MulterError) {
+                // Если произошла ошибка Multer
+                return res.status(400).send("Ошибка при загрузке файла");
+            } else if (err) {
+                // Если произошла другая ошибка
+                return res.status(500).send("Произошла ошибка сервера");
+            }
+
+            // Если файл успешно загружен
+            if (!req.file) {
+                return res.status(400).send("Ошибка при загрузке файла");
+            }
+
+            const { filename, originalname, mimetype, size } = req.file;
+            const newVideo = new Video({
+                filename,
+                originalname,
+                mimetype,
+                size
+            });
+
+            newVideo.save()
+                .then(() => {
+                    res.send("Файл загружен");
+                })
+                .catch(error => {
+                    console.log(error);
+                    res.status(500).send("Произошла ошибка при сохранении видео");
+                });
+        });
+    } catch (error) {
+        res.status(500).send("Произошла ошибка на сервере");
+    }
+};
 
 
 
