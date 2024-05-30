@@ -2,12 +2,12 @@
 const express = require('express');
 const app = express();
 
-const multer  = require("multer");
+// const multer  = require("multer");
 const fs = require('fs');
 const path = require('path');
 const db = require('../db');
 
-const Video = require('../models/videoModel');
+// const Video = require('../models/videoModel');
 
 // ---- МЕТОДЫ ---- //
 
@@ -58,111 +58,41 @@ exports.startStream = (req, res) => {
     console.log('VIDEO EXPORT ROUTE');
 }
 
-const upload = multer({ dest: "../videos" });
-exports.importVideo = async (req, res, next) => {
-    try {
-        upload.single("filedata")(req, res, err => {
-            if (err instanceof multer.MulterError) {
-                // Если произошла ошибка Multer
-                return res.status(400).send("Ошибка при загрузке файла");
-            } else if (err) {
-                // Если произошла другая ошибка
-                return res.status(500).send("Произошла ошибка сервера");
-            }
-
-            // Если файл успешно загружен
-            if (!req.file) {
-                return res.status(400).send("Ошибка при загрузке файла");
-            }
-
-            const { filename, originalname, mimetype, size } = req.file;
-            const newVideo = new Video({
-                filename,
-                originalname,
-                mimetype,
-                size
-            });
-
-            newVideo.save()
-                .then(() => {
-                    res.send("Файл загружен");
-                })
-                .catch(error => {
-                    console.log(error);
-                    res.status(500).send("Произошла ошибка при сохранении видео");
-                });
-        });
-    } catch (error) {
-        res.status(500).send("Произошла ошибка на сервере");
-    }
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // const uploadDir = ; // Определите путь сохранения файлов
-// const upload = multer({ dest: path.join(__dirname, '../videos') }); // Используйте multer для обработки запросов с файлами
-// exports.importVideoFromClient = upload.single('video'), async (req, res) => {
+// const upload = multer({ dest: "../videos" });
+// exports.importVideo = async (req, res, next) => {
 //     try {
-//         // // Получаем информацию о загруженном файле
-//         // const { filename, originalname, mimetype, size } = req.file;
+//         upload.single("filedata")(req, res, err => {
+//             if (err instanceof multer.MulterError) {
+//                 // Если произошла ошибка Multer
+//                 return res.status(400).send("Ошибка при загрузке файла");
+//             } else if (err) {
+//                 // Если произошла другая ошибка
+//                 return res.status(500).send("Произошла ошибка сервера");
+//             }
 
-//         // // Создаем новую запись о видео в базе данных
-//         // const newVideo = new Video({
-//         //     filename,
-//         //     originalname,
-//         //     mimetype,
-//         //     size
-//         // });
+//             // Если файл успешно загружен
+//             if (!req.file) {
+//                 return res.status(400).send("Ошибка при загрузке файла");
+//             }
 
-//         // // Сохраняем запись в базе данных
-//         // await newVideo.save();
+//             const { filename, originalname, mimetype, size } = req.file;
+//             const newVideo = new Video({
+//                 filename,
+//                 originalname,
+//                 mimetype,
+//                 size
+//             });
 
-//         // Отправляем ответ клиенту
-//         res.status(201).send('Видео успешно загружено.');
+//             newVideo.save()
+//                 .then(() => {
+//                     res.send("Файл загружен");
+//                 })
+//                 .catch(error => {
+//                     console.log(error);
+//                     res.status(500).send("Произошла ошибка при сохранении видео");
+//                 });
+//         });
 //     } catch (error) {
-//         console.error('Ошибка при загрузке видео:', error);
-//         res.status(500).send('Произошла ошибка при загрузке видео.');
+//         res.status(500).send("Произошла ошибка на сервере");
 //     }
-//     console.log('VIDEO IMPORT ROUTE');
 // };
