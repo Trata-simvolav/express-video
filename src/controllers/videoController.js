@@ -17,8 +17,8 @@ exports.test = (req, res) => {
 };
 
 exports.startStream = (req, res) => { 
-    const videoId = req.params.identification;
-    const query = 'SELECT filename FROM videos WHERE identification = ?';
+    const videoId = req.params.id;
+    const query = 'SELECT filename FROM videos_express WHERE identification = ?';
     db.query(query, [videoId], (err, results) => {
         if (err) {
             console.error('Ошибка выполнения запроса:', err.stack);
